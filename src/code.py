@@ -7,7 +7,6 @@ import adafruit_esp32spi.adafruit_esp32spi_socket as socket
 from adafruit_esp32spi import adafruit_esp32spi
 from secrets import secrets
 import adafruit_scd30
-import adafruit_bme680
 import adafruit_pm25.i2c
 import supervisor
 
@@ -36,18 +35,10 @@ def web_update():
     scd_co2 = scd.CO2
     scd_temp = scd.temperature
     scd_hum = scd.relative_humidity
-    bme_temp = bme680.temperature
-    bme_gas = bme680.gas
-    bme_hum = bme680.relative_humidity
-    bme_pressure = bme680.pressure
     data = {'password': 'fuck',
     'scd_co2': scd_co2,
     'scd_temp': scd_temp,
     'scd_hum': scd_hum,
-    'bme_temp': bme_temp,
-    'bme_gas': bme_gas,
-    'bme_hum': bme_hum,
-    'bme_pressure': bme_pressure,
     'pm25_env': aqdata["pm25 env"],
     'aq_25um': aqdata["particles 25um"]
     }
@@ -67,9 +58,6 @@ try:
     i2c = board.I2C()
     print("connecting SCD30")
     scd = adafruit_scd30.SCD30(i2c)
-    print("connecting BME680")
-    bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c)
-    bme680.sea_level_pressure = 1016.26 # only useful to calculate altitude, we don't care about that here
     print("connecting pm25")
     pm25 = adafruit_pm25.i2c.PM25_I2C(i2c)
 except Exception as e:
